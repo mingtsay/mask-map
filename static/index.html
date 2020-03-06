@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="utf-8"/>
+    <title>附近藥局口罩剩餘數量查詢</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/css/pure-min.css"/>
+    <style>
+        #wrapper {
+            display: table;
+            margin: 0 auto;
+            width: 95%;
+        }
+
+        table {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <h1>附近藥局口罩剩餘數量查詢</h1>
+    <form id="form" class="pure-form pure-form-aligned">
+        <div id="unsupported">您的瀏覽器不支援定位功能。</div>
+        <fieldset id="position">
+            <div class="pure-control-group">
+                <label for="position-longitude">經度</label>
+                <input id="position-longitude" required/>
+                <button type="button" id="position-obtain" class="pure-button pure-button-default">
+                    取得目前位置
+                </button>
+            </div>
+            <div class="pure-control-group">
+                <label for="position-latitude">緯度</label>
+                <input id="position-latitude" required/>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="list-obtain-limit">列出數量</label>
+                <select id="list-obtain-limit">
+                    <option value="-1">不限制</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+                <button type="submit" class="pure-button pure-button-primary">取得附近藥局資訊</button>
+            </div>
+        </fieldset>
+    </form>
+    <table class="pure-table pure-table-striped">
+        <thead>
+        <tr>
+            <th class="list-name" rowspan="2">醫事機構名稱</th>
+            <th class="list-phone" rowspan="2">醫事機構電話</th>
+            <th class="list-address" rowspan="2">醫事機構地址</th>
+            <th class="list-mask" colspan="2">口罩剩餘數量</th>
+            <th class="list-note" rowspan="2">備註</th>
+            <th class="list-custom-note" rowspan="2">口罩銷售提醒</th>
+            <th class="list-website" rowspan="2">網站</th>
+            <th class="list-distance" rowspan="2">距離</th>
+        </tr>
+        <tr>
+            <th class="list-mask list-mask-adult">成人</th>
+            <th class="list-mask list-mask-child">兒童</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        <tr>
+            <td colspan="9">請透過上方表單操作。</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    (() => {
+        if (!("geolocation" in navigator)) return;
+        document.getElementById('unsupported').style.display = 'none';
+
+        document.getElementById('position-obtain').addEventListener('click', () => {
+            navigator.geolocation.getCurrentPosition(position => {
+                document.getElementById('position-longitude').value = position.coords.longitude;
+                document.getElementById('position-latitude').value = position.coords.latitude;
+            }, positionError => {
+                alert(`目前位置取得失敗 (${positionError.code}) ${positionError.message}`);
+            });
+        });
+
+        document.getElementById('form').addEventListener('submit', async event => {
+            const longitude = document.getElementById('position-longitude').value;
+            const latitude = document.getElementById('position-latitude').value;
+            const limit = document.getElementById('list-obtain-limit').value;
+
+            const tbody = document.getElementById('tbody');
+            while (tbody.hasChildNodes()) tbody.removeChild(tbody.firstChild);
+
+            const loadingTr = document.createElement('tr');
+            const loadingTd = document.createElement('td');
+            loadingTd.colSpan = 9;
+            loadingTd.textContent = '資料正在載入中…';
+            loadingTr.appendChild(loadingTd);
+            tbody.appendChild(loadingTr);
+
+            event.preventDefault();
+
+            const list = await fetch(`/list/${longitude}/${latitude}?limit=${limit}`)
+                .then(r => r.json());
+
+            tbody.removeChild(tbody.firstChild);
+
+            const properties = [
+                {key: 'name', className: 'list-name'},
+                {key: 'phone', className: 'list-phone'},
+                {key: 'address', className: 'list-address'},
+                {key: 'mask_adult', className: 'list-mask list-mask-adult'},
+                {key: 'mask_child', className: 'list-mask list-mask-child'},
+                {key: 'note', className: 'list-note'},
+                {key: 'custom_note', className: 'list-custom_note'},
+                {key: 'website', className: 'list-website'},
+                {key: 'distance', className: 'list-distance'}
+            ];
+            for (const i in list.features) {
+                const record = list.features[i].properties;
+                const tr = document.createElement('tr');
+                for (const j in properties) {
+                    const property = properties[j];
+                    const td = document.createElement('td');
+                    td.textContent = 'distance' !== property.key ? record[property.key] :
+                        `${record.distance.distance} ${record.distance.unit}`;
+                    td.className = property.className;
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+        });
+    })();
+</script>
+</body>
+</html>

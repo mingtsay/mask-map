@@ -1,0 +1,26 @@
+{
+  "name": "mask-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Ming Tsay <mt@moztw.org>",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "geo-distance": "^0.2.0",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-conditional-get": "^2.0.0",
+    "koa-etag": "^3.0.0",
+    "koa-logger": "^3.2.1",
+    "koa-response-time": "^2.1.0",
+    "koa-router": "^8.0.8",
+    "koa-send": "^5.0.0",
+    "node-fetch": "^2.6.0",
+    "whatwg-fetch": "^3.0.0"
+  }
+}
