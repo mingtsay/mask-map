@@ -48,6 +48,10 @@
                     <option value="500">500</option>
                     <option value="1000">1000</option>
                 </select>
+                <label for="list-obtain-filter">
+                    <input type="checkbox" id="list-obtain-filter" value="on" checked/>
+                    不顯示無成人口罩庫存的醫事機構
+                </label>
                 <button type="submit" class="pure-button pure-button-primary">取得附近藥局資訊</button>
             </div>
         </fieldset>
@@ -94,6 +98,7 @@
             const longitude = document.getElementById('position-longitude').value;
             const latitude = document.getElementById('position-latitude').value;
             const limit = document.getElementById('list-obtain-limit').value;
+            const filter = document.getElementById('list-obtain-filter').checked;
 
             const tbody = document.getElementById('tbody');
             while (tbody.hasChildNodes()) tbody.removeChild(tbody.firstChild);
@@ -107,7 +112,7 @@
 
             event.preventDefault();
 
-            const list = await fetch(`/list/${longitude}/${latitude}?limit=${limit}`)
+            const list = await fetch(`/list/${longitude}/${latitude}?limit=${limit}${filter ? '&filter=on' : '' }`)
                 .then(r => r.json());
 
             tbody.removeChild(tbody.firstChild);
