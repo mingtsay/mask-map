@@ -48,10 +48,14 @@
                     <option value="500">500</option>
                     <option value="1000">1000</option>
                 </select>
+            </div>
+            <div class="pure-controls">
                 <label for="list-obtain-filter">
                     <input type="checkbox" id="list-obtain-filter" value="on" checked/>
                     不顯示無成人口罩庫存的醫事機構
                 </label>
+            </div>
+            <div class="pure-controls">
                 <button type="submit" class="pure-button pure-button-primary">取得附近醫事機構資訊</button>
             </div>
         </fieldset>
@@ -112,7 +116,7 @@
 
             event.preventDefault();
 
-            const list = await fetch(`/list/${longitude}/${latitude}?limit=${limit}${filter ? '&filter=on' : '' }`)
+            const list = await fetch(`/list/${longitude}/${latitude}?limit=${limit}${filter ? '&filter=on' : ''}`)
                 .then(r => r.json());
 
             tbody.removeChild(tbody.firstChild);
