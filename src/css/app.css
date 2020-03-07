@@ -1,0 +1,9 @@
+#wrapper {
+    display: table;
+    margin: 0 auto;
+    width: 95%;
+}
+
+table {
+    width: 100%;
+}

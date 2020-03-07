@@ -9,23 +9,16 @@ module.exports = {
     allowedMethods: () => router.allowedMethods()
 };
 
-router.get('/', async (ctx, next) => {
-    await require('koa-send')(ctx, 'static/index.html');
+router.get('/', async ctx => {
+    ctx.status = 302;
+    ctx.redirect('/index.html');
 });
 
-router.get('/css/pure-min.css', async (ctx, next) => {
-    await require('koa-send')(ctx, 'static/pure-min.css');
-});
-
-router.get('/css/grids-responsive-min.css', async (ctx, next) => {
-    await require('koa-send')(ctx, 'static/grids-responsive-min.css');
-});
-
-router.get('/raw.json', async (ctx, next) => {
+router.get('/raw.json', async ctx => {
     ctx.body = await fetchMask();
 });
 
-router.get('/tgos', async (ctx, next) => {
+router.get('/tgos', async ctx => {
     const mask = await fetchMask();
 
     const Tgos = new Map();
@@ -60,7 +53,7 @@ router.get('/tgos', async (ctx, next) => {
     ctx.body = tgos;
 });
 
-router.get('/list/:longitude/:latitude', async (ctx, next) => {
+router.get('/list/:longitude/:latitude', async ctx => {
     const userLocation = {lon: ctx.params.longitude, lat: ctx.params.latitude};
 
     const mask = await fetchMask();
@@ -86,7 +79,7 @@ router.get('/list/:longitude/:latitude', async (ctx, next) => {
     };
 });
 
-router.get('/tgos/:county/:town?/:cunli?', async (ctx, next) => {
+router.get('/tgos/:county/:town?/:cunli?', async ctx => {
     const county = ctx.params.county || false;
     const town = ctx.params.town || false;
     const cunli = ctx.params.cunli || false;
