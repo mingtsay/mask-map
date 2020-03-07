@@ -17,6 +17,10 @@ router.get('/css/pure-min.css', async (ctx, next) => {
     await require('koa-send')(ctx, 'static/pure-min.css');
 });
 
+router.get('/css/grids-responsive-min.css', async (ctx, next) => {
+    await require('koa-send')(ctx, 'static/grids-responsive-min.css');
+});
+
 router.get('/raw.json', async (ctx, next) => {
     ctx.body = await fetchMask();
 });
@@ -98,9 +102,9 @@ router.get('/tgos/:county/:town?/:cunli?', async (ctx, next) => {
         type: 'FeatureCollection',
         features: mask.features
             .filter(el => !(
-                county && county !== el.properties.county ||
-                town && town !== el.properties.town ||
-                cunli && cunli !== el.properties.cunli ||
+                county && county !== '不限制' && county !== el.properties.county ||
+                town && town !== '不限制' && town !== el.properties.town ||
+                cunli && cunli !== '不限制' && cunli !== el.properties.cunli ||
                 filter && el.properties.mask_adult <= 0
             ))
             .slice(offset, limit < 0 ? -1 : offset + limit)
