@@ -3,7 +3,8 @@ module.exports = async (ctx, next) => {
         '/index.html',
         '/css/pure-min.css',
         '/css/grids-responsive-min.css',
-        '/js/app.js'
+        '/css/app.min.css',
+        '/js/app.min.js'
     ];
 
     if (static_files.indexOf(ctx.path) > -1) {
