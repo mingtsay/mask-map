@@ -7,6 +7,7 @@ const router = require('./router');
     .use(require('koa-response-time')())
     .use(require('koa-conditional-get')())
     .use(require('koa-etag')())
+    .use(require('./static'))
     .use(router.routes())
     .use(router.allowedMethods())
     .listen(process.env.LISTEN_PORT);
