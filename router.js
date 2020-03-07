@@ -9,6 +9,11 @@ module.exports = {
     allowedMethods: () => router.allowedMethods()
 };
 
+router.get('/', async ctx => {
+    ctx.status = 302;
+    ctx.redirect('/index.html');
+});
+
 router.get('/raw.json', async ctx => {
     ctx.body = await fetchMask();
 });
