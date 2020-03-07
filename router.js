@@ -84,8 +84,6 @@ router.get('/tgos/:county/:town?/:cunli?', async ctx => {
     const town = ctx.params.town || false;
     const cunli = ctx.params.cunli || false;
 
-    console.log(county, town, cunli);
-
     const mask = await fetchMask();
     const offset = parseInt(ctx.query.offset, 10) || 0;
     const limit = parseInt(ctx.query.limit, 10) || 50;
