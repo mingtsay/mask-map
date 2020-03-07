@@ -26,7 +26,7 @@ router.get('/list/:longitude/:latitude', async (ctx, next) => {
     const mask = await fetchMask();
     const offset = parseInt(ctx.query.offset, 10) || 0;
     const limit = parseInt(ctx.query.limit, 10) || 50;
-    const filter = ctx.query.filter ? true : false;
+    const filter = !!ctx.query.filter;
     ctx.body = {
         type: 'FeatureCollection',
         features: mask.features
