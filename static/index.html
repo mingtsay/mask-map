@@ -144,21 +144,7 @@
         if (!("geolocation" in navigator)) return;
         document.getElementById('unsupported').style.display = 'none';
 
-        document.getElementById('position-obtain').addEventListener('click', () => {
-            navigator.geolocation.getCurrentPosition(position => {
-                document.getElementById('position-longitude').value = position.coords.longitude;
-                document.getElementById('position-latitude').value = position.coords.latitude;
-            }, positionError => {
-                alert(`目前位置取得失敗 (${positionError.code}) ${positionError.message}`);
-            });
-        });
-
-        document.getElementById('form-position').addEventListener('submit', async event => {
-            const longitude = document.getElementById('position-longitude').value;
-            const latitude = document.getElementById('position-latitude').value;
-            const limit = document.getElementById('list-obtain-limit').value;
-            const filter = document.getElementById('list-obtain-filter').checked;
-
+        const displayMaskData = async (uri, hasDistance) => {
             const tbody = document.getElementById('tbody');
             while (tbody.hasChildNodes()) tbody.removeChild(tbody.firstChild);
 
@@ -169,10 +155,7 @@
             loadingTr.appendChild(loadingTd);
             tbody.appendChild(loadingTr);
 
-            event.preventDefault();
-
-            const list = await fetch(`/list/${longitude}/${latitude}?limit=${limit}${filter ? '&filter=on' : ''}`)
-                .then(r => r.json());
+            const list = await fetch(uri).then(r => r.json());
 
             tbody.removeChild(tbody.firstChild);
 
@@ -194,12 +177,32 @@
                     const property = properties[j];
                     const td = document.createElement('td');
                     td.textContent = 'distance' !== property.key ? record[property.key] :
-                        `${record.distance.distance} ${record.distance.unit}`;
+                        (hasDistance ? `${record.distance.distance} ${record.distance.unit}` : '不適用');
                     td.className = property.className;
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
             }
+        };
+
+        document.getElementById('position-obtain').addEventListener('click', () => {
+            navigator.geolocation.getCurrentPosition(position => {
+                document.getElementById('position-longitude').value = position.coords.longitude;
+                document.getElementById('position-latitude').value = position.coords.latitude;
+            }, positionError => {
+                alert(`目前位置取得失敗 (${positionError.code}) ${positionError.message}`);
+            });
+        });
+
+        document.getElementById('form-position').addEventListener('submit', event => {
+            event.preventDefault();
+
+            const longitude = document.getElementById('position-longitude').value;
+            const latitude = document.getElementById('position-latitude').value;
+            const limit = document.getElementById('list-obtain-limit').value;
+            const filter = document.getElementById('list-obtain-filter').checked;
+
+            displayMaskData(`/list/${longitude}/${latitude}?limit=${limit}${filter ? '&filter=on' : ''}`, true);
         });
 
         document.getElementById('tgos-county').addEventListener('change', () => {
@@ -232,53 +235,16 @@
             }
         });
 
-        document.getElementById('form-tgos').addEventListener('submit', async event => {
+        document.getElementById('form-tgos').addEventListener('submit', event => {
+            event.preventDefault();
+
             const county = document.getElementById('tgos-county').value;
             const town = document.getElementById('tgos-town').value;
             const cunli = document.getElementById('tgos-cunli').value;
             const limit = document.getElementById('tgos-obtain-limit').value;
             const filter = document.getElementById('tgos-obtain-filter').checked;
 
-            const tbody = document.getElementById('tbody');
-            while (tbody.hasChildNodes()) tbody.removeChild(tbody.firstChild);
-
-            const loadingTr = document.createElement('tr');
-            const loadingTd = document.createElement('td');
-            loadingTd.colSpan = 9;
-            loadingTd.textContent = '資料正在載入中…';
-            loadingTr.appendChild(loadingTd);
-            tbody.appendChild(loadingTr);
-
-            event.preventDefault();
-
-            const list = await fetch(`/tgos/${county}/${town}/${cunli}?limit=${limit}${filter ? '&filter=on' : ''}`)
-                .then(r => r.json());
-
-            tbody.removeChild(tbody.firstChild);
-
-            const properties = [
-                {key: 'name', className: 'list-name'},
-                {key: 'phone', className: 'list-phone'},
-                {key: 'address', className: 'list-address'},
-                {key: 'mask_adult', className: 'list-mask list-mask-adult'},
-                {key: 'mask_child', className: 'list-mask list-mask-child'},
-                {key: 'note', className: 'list-note'},
-                {key: 'custom_note', className: 'list-custom_note'},
-                {key: 'website', className: 'list-website'},
-                {key: 'distance', className: 'list-distance'}
-            ];
-            for (const i in list.features) {
-                const record = list.features[i].properties;
-                const tr = document.createElement('tr');
-                for (const j in properties) {
-                    const property = properties[j];
-                    const td = document.createElement('td');
-                    td.textContent = 'distance' !== property.key ? record[property.key] : '不適用';
-                    td.className = property.className;
-                    tr.appendChild(td);
-                }
-                tbody.appendChild(tr);
-            }
+            displayMaskData(`/tgos/${county}/${town}/${cunli}?limit=${limit}${filter ? '&filter=on' : ''}`, false);
         });
 
         fetch('/tgos').then(r => r.json()).then(tgos => {
