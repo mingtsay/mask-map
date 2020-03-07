@@ -20,3 +20,9 @@ MASK_DATA_URI=https://raw.githubusercontent.com/kiang/pharmacies/master/json/poi
 LISTEN_PORT=8886 \
 node index.js
 ```
+
+## Note
+
+Currently I use this website to minify my JS and CSS files:
+
+https://www.minifier.org/
