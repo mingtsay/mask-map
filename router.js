@@ -68,7 +68,7 @@ router.get('/list/:longitude/:latitude', async (ctx, next) => {
     ctx.body = {
         type: 'FeatureCollection',
         features: mask.features
-            .filter(el => el.properties.mask_adult > 0)
+            .filter(el => !(filter && el.properties.mask_adult <= 0))
             .map(el => {
                 el.properties.distance = Distance.between(userLocation, {
                     lon: el.geometry.coordinates[0],
