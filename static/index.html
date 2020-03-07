@@ -159,6 +159,17 @@
 
             tbody.removeChild(tbody.firstChild);
 
+            if (!list.features.length) {
+                const emptyTr = document.createElement('tr');
+                const emptyTd = document.createElement('td');
+                emptyTd.colSpan = 9;
+                emptyTd.textContent = '您選擇的條件無任何醫事機構資訊可供顯示。';
+                emptyTr.appendChild(emptyTd);
+                tbody.appendChild(emptyTr);
+
+                return;
+            }
+
             const properties = [
                 {key: 'name', className: 'list-name'},
                 {key: 'phone', className: 'list-phone'},
