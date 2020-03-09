@@ -12,7 +12,7 @@
 <div id="wrapper">
     <h1>醫事機構口罩剩餘數量查詢</h1>
     <div class="pure-g">
-        <div class="pure-u-1 pure-u-md-1-2">
+        <div class="pure-u-1 pure-u-md-1-3">
             <form id="form-position" class="pure-form pure-form-aligned">
                 <div id="unsupported">您的瀏覽器不支援定位功能。</div>
                 <fieldset id="position">
@@ -56,7 +56,7 @@
                 </fieldset>
             </form>
         </div>
-        <div class="pure-u-1 pure-u-md-1-2">
+        <div class="pure-u-1 pure-u-md-1-3">
             <form id="form-tgos" class="pure-form pure-form-aligned">
                 <fieldset id="tgos">
                     <div class="pure-control-group">
@@ -100,6 +100,40 @@
                     </div>
                     <div class="pure-controls">
                         <button type="submit" class="pure-button pure-button-primary">取得指定區域醫事機構資訊</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-3">
+            <form id="form-search" class="pure-form pure-form-aligned">
+                <fieldset id="search">
+                    <div class="pure-control-group">
+                        <label for="search-query">輸入醫事機構名稱</label>
+                        <input id="search-query" type="text" required/>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="pure-control-group">
+                        <label for="search-obtain-limit">列出數量</label>
+                        <select id="search-obtain-limit">
+                            <option value="-1">不限制</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="500">500</option>
+                            <option value="1000">1000</option>
+                        </select>
+                    </div>
+                    <div class="pure-controls">
+                        <label for="search-obtain-filter">
+                            <input type="checkbox" id="search-obtain-filter" value="on" checked/>
+                            不顯示無成人口罩庫存的醫事機構
+                        </label>
+                    </div>
+                    <div class="pure-controls">
+                        <button type="submit" class="pure-button pure-button-primary">搜尋醫事機構</button>
                     </div>
                 </fieldset>
             </form>
