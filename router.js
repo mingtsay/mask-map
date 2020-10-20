@@ -96,3 +96,23 @@ router.get('/tgos/:county/:town?/:cunli?', async ctx => {
             .slice(offset, limit < 0 ? -1 : offset + limit)
     };
 });
+
+router.get('/search', async ctx => {
+    const query = (ctx.query.q || '').split(' ').filter(el => !!el.length);
+    const query_regex = new RegExp(query.join('|'), 'gi');
+
+    const mask = await fetchMask();
+    const offset = parseInt(ctx.query.offset, 10) || 0;
+    const limit = parseInt(ctx.query.limit, 10) || 50;
+    const filter = !!ctx.query.filter;
+
+    ctx.body = {
+        type: 'FeatureCollection',
+        features: mask.features
+            .filter(el => !(
+                query && 0 > el.properties.name.search(query_regex) ||
+                filter && el.properties.mask_adult <= 0
+            ))
+            .slice(offset, limit < 0 ? -1 : offset + limit)
+    };
+});

@@ -126,4 +126,16 @@
             document.getElementById('tgos-county').appendChild(county_option);
         }
     });
+
+    document.getElementById('form-search').addEventListener('submit', event => {
+        event.preventDefault();
+
+        const query = document.getElementById('search-query').value;
+        const limit = document.getElementById('search-obtain-limit').value;
+        const filter = document.getElementById('search-obtain-filter').checked;
+
+        const query_encoded = encodeURIComponent(query).replace(/%20/g, '+');
+
+        displayMaskData(`/search?q=${query_encoded}&limit=${limit}${filter ? '&filter=on' : ''}`, false);
+    });
 })();
