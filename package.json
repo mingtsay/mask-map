@@ -12,24 +12,24 @@
   "author": "Ming Tsay <mt@moztw.org>",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.0.1",
     "geo-distance": "^0.2.0",
-    "koa": "^2.13.0",
+    "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-conditional-get": "^3.0.0",
     "koa-etag": "^4.0.0",
     "koa-logger": "^3.2.1",
     "koa-response-time": "^2.1.0",
-    "koa-router": "^9.4.0",
+    "koa-router": "^12.0.0",
     "koa-static": "^5.0.0",
-    "node-fetch": "^2.6.1",
-    "whatwg-fetch": "^3.4.1"
+    "node-fetch": "^2.6.7",
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
-    "del": "^6.0.0",
+    "del": "^7.0.0",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-htmlmin": "^5.0.1",
-    "gulp-terser": "^1.4.0"
+    "gulp-terser": "^2.1.0"
   }
 }
